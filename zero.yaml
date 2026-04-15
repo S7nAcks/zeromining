@@ -1,0 +1,11 @@
+nodes:
+  id: 11
+  coin: BTC
+  name: Bitcoin
+  base: bitcoin
+
+  id: 12
+  coin: BCH
+  name: Bitcoin Cash
+  base: bitcoin
+  
