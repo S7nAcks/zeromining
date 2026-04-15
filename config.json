@@ -1,0 +1,9 @@
+{
+  "EXPLORER": {
+    "base": "https://mempool-explorer.nito.network",
+    "block": "/block/",
+    "tx": "/tx/",
+    "address": "/address/",
+    "api": "/api"
+  }
+}
