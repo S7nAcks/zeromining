@@ -3,8 +3,6 @@ const CONFIG = require("../config.json");
 
 const EXPLORER = CONFIG.EXPLORER.base + CONFIG.EXPLORER.api;
 
-const fetch = require("node-fetch");
-
 let pendingBlocks = new Map();
 
 function isCandidate(event) {
