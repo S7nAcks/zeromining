@@ -1,7 +1,7 @@
 // RPC
 const RPC_URL = "http://10.10.10.201:5000";
-const RPC_USER = "zero";
-const RPC_PASS = "zero.zero";
+const RPC_USER = "zuser";
+const RPC_PASS = "zpass";
 
 const express = require("express");
 const fs = require("fs");
