@@ -19,7 +19,7 @@ app.use(express.static("public"));
 
 // Serve config.json to frontend
 app.get("/config.json", (req, res) => {
-    res.sendFile(path.join(__dirname, "config.json"));
+    res.sendFile(path.join(__dirname, "..", "config.json"));
 });
 
 // ---------------- JSON ----------------
