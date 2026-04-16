@@ -127,7 +127,7 @@ nodes:
     file: "x86_64-linux-gnu.tar.gz"
     algo: "sha256d"
 
-- id: 20
+  - id: 20
     node: "ESF"
     name: "ElevenSeventyFive"
     base: "elevenseventyfive"
