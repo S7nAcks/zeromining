@@ -49,7 +49,6 @@ nodes:
     explorerTxLink: "https://bitcoinii.ddns.net/explorer/tx/{0}"
     explorerAccountLink: "https://bitcoinii.ddns.net/explorer/address/{0}"
 
-
   - id: 14
     stat: "active"
     node: "BCH2"
@@ -64,7 +63,6 @@ nodes:
     explorerBlockLink: ""
     explorerTxLink: ""
     explorerAccountLink: ""
-
 
   - id: 15
     stat: "active"
@@ -129,8 +127,7 @@ nodes:
     file: "x86_64-linux-gnu.tar.gz"
     algo: "sha256d"
 
-
-- id: 10
+- id: 20
     node: "ESF"
     name: "ElevenSeventyFive"
     base: "elevenseventyfive"
@@ -139,7 +136,7 @@ nodes:
     file: "linux-x86_64.tar.gz"
     algo: "sha256d"
 
-  - id: 10
+  - id: 21
     node: "PPC"
     name: "Peercoin"
     base: "peercoin"
@@ -148,7 +145,7 @@ nodes:
     file: "x86_64-linux-gnu.tar.gz"
     algo: "sha256d"
     
-  - id: 10
+  - id: 22
     node: "HRC"
     name: "Hypercoin"
     base: "hipercoin"
@@ -157,7 +154,7 @@ nodes:
     file: "https://github.com/Hypercoin-PRJ/wallet/raw/refs/heads/master/Hypercoin-wallet-Linux-v30.2.zip"
     algo: "sha256d"
     
-  - id: 10
+  - id: 23
     node: "OXC"
     name: "OrdeXcoin"
     base: "ordexcoin"
@@ -166,7 +163,7 @@ nodes:
     file: "linux.tar.gz"
     algo: "sha256d"
     
-  - id: 10
+  - id: 24
     node: "DMD"
     name: "DebitMyData"
     base: "debitmydata"
@@ -175,7 +172,7 @@ nodes:
     file: "linux.tar.gz"
     algo: "sha256d"
     
-  - id: 10
+  - id: 25
     node: "XRO"
     name: "XeroCoin"
     base: "xerocoin"
@@ -186,7 +183,7 @@ nodes:
     file_cli: "https://github.com/XeroCoinX/Xero/releases/download/Version.25.2.0/xerocoin-core-v25.2.0-linux-x86_64-cli"
     algo: "sha256d"
 
-  - id: 10
+  - id: 26
     node: "WJK"
     name: "WojakCoin"
     base: ""
@@ -197,16 +194,18 @@ nodes:
     file_cli: "https://github.com/WojakCoinProj/wojakcore/releases/download/1.0.1.2/wojakcoin-cli"
     algo: "sha256d"
 
-  - id: 10
-    node: ""
-    name: ""
+
+
+  - id: 00
+    node: "BSV"
+    name: "Bitcoin SV"
     base: ""
     site: "github.com"
     repo: ""
     file: ""
     algo: ""
 
-  - id: 10
+  - id: 00
     node: ""
     name: ""
     base: ""
