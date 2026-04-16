@@ -6,18 +6,19 @@ nodes:
     stat: "active"
     node: "BTC"
     name: "Bitcoin"
-    base: "bitcoin"
     site: "bitcoincore.org"
     repo: "bitcoin/bitcoin"
     file: ""
+    base: "bitcoin"
+    daemon: ""
+    cliexe: ""
     algo: "sha256d"
-    family: "bitcoin"
     website: "https://www.bitcoin.org/"
-    market: "https://coinmarketcap.com/currencies/bitcoin/"
-    explorerBlockLink: "https://www.blockchain.com/btc/block/$hash$"
-    explorerTxLink: "https://www.blockchain.com/btc/tx/{0}"
-    explorerAccountLink: "https://www.blockchain.com/btc/address/{0}"
-
+    exploreURL: ""
+    exploreBlock: ""
+    exploreTx: ""
+    mempoolURL: ""
+    
   - id: 12
     stat: "active"
     node: "BCH"
@@ -27,7 +28,6 @@ nodes:
     repo: "bitcoin-cash-node/bitcoin-cash-node"
     file: "x86_64-linux-gnu.tar.gz"
     algo: "sha256d"
-    family: "bitcoin"
     website: ""
     market: ""
     explorerBlockLink: "https://bchblockexplorer.com/block/$height$"
@@ -43,7 +43,6 @@ nodes:
     repo: "Bitcoin-II/BitcoinII-Core"
     file: "x86_64-linux-CLI.tar.gz"
     algo: "sha256d"
-    family: "bitcoin"
     website: "https://bitcoin-ii.org/"
     market: "https://coinmarketcap.com/currencies/bitcoinii/"
     explorerBlockLink: "https://bitcoinii.ddns.net/explorer/block/$hash$"
@@ -60,7 +59,6 @@ nodes:
     file: "linux64.tar.gz"
     repo: "BitcoincashII/bitcoincashII-core"
     algo: "sha256d"
-    family: "bitcoin"
     website: ""
     market: ""
     explorerBlockLink: ""
@@ -77,7 +75,6 @@ nodes:
     repo: "Digibyte-Core/digibyte"
     file: "x86_64-linux-gnu.tar.gz"
     algo: "sha256d"
-    family: "bitcoin"
     website: "https://digibyte.org/"
     market: "https://coinmarketcap.com/currencies/digibyte/"
     explorerBlockLink: "https://chainz.cryptoid.info/dgb/block.dws?$height$.htm"
@@ -93,7 +90,6 @@ nodes:
     repo: "NitoNetwork/Nito-core"
     file: "x86_64-linux-gnu.tar.gz"
     algo: "sha256d"
-    family: "bitcoin"
     website: "https://nito.network/"
     market: ""
     blockexplorer: "https://explorer.nito.network"
@@ -112,7 +108,6 @@ nodes:
     repo: "devaultcrypto/devault"
     file: "x86_64-linux-gnu.tar.gz"
     algo: "sha256d"
-    family: "bitcoin"
 
   - id: 18
     stat: "active"
@@ -123,7 +118,6 @@ nodes:
     repo: "titcoin/titcoin"
     file: "tar.gz"
     algo: "sha256d"
-    family: "bitcoin"
 
   - id: 19
     stat: "active"
@@ -134,7 +128,6 @@ nodes:
     repo: "Ergon-moe/Bitcoin-Static"
     file: "x86_64-linux-gnu.tar.gz"
     algo: "sha256d"
-    family: "bitcoin"
 
 
 - id: 10
@@ -145,7 +138,6 @@ nodes:
     repo: "1175Dev/1175"
     file: "linux-x86_64.tar.gz"
     algo: "sha256d"
-    family: "bitcoin"
 
   - id: 10
     node: "PPC"
@@ -155,57 +147,55 @@ nodes:
     repo: "peercoin/peercoin"
     file: "x86_64-linux-gnu.tar.gz"
     algo: "sha256d"
-    family: ""
-
+    
   - id: 10
     node: "HRC"
     name: "Hypercoin"
-    base: ""
+    base: "hipercoin"
     site: "github.com"
     repo: "Hypercoin-PRJ/hypercoin"
-    file: ""
+    file: "https://github.com/Hypercoin-PRJ/wallet/raw/refs/heads/master/Hypercoin-wallet-Linux-v30.2.zip"
     algo: "sha256d"
-    family: ""
-
+    
   - id: 10
     node: "OXC"
     name: "OrdeXcoin"
-    base: ""
+    base: "ordexcoin"
     site: "github.com"
-    repo: ""
-    file: ""
+    repo: "OrdexCoin/Ordexcoin-Core"
+    file: "linux.tar.gz"
     algo: "sha256d"
-    family: ""
-
+    
   - id: 10
     node: "DMD"
     name: "DebitMyData"
-    base: ""
+    base: "debitmydata"
     site: "github.com"
-    repo: ""
-    file: ""
+    repo: "DebitMyData-PoW/DebitMyData-PoW-Core"
+    file: "linux.tar.gz"
     algo: "sha256d"
-    family: ""
-
+    
   - id: 10
     node: "XRO"
     name: "XeroCoin"
-    base: ""
+    base: "xerocoin"
     site: "github.com"
-    repo: ""
-    file: ""
+    repo: "XeroCoinX/Xero"
+    file: "multiple"
+    file_daemon: "https://github.com/XeroCoinX/Xero/releases/download/Version.25.2.0/xerocoin-core-v25.2.0-linux-x86_64-daemon"
+    file_cli: "https://github.com/XeroCoinX/Xero/releases/download/Version.25.2.0/xerocoin-core-v25.2.0-linux-x86_64-cli"
     algo: "sha256d"
-    family: ""
 
   - id: 10
     node: "WJK"
     name: "WojakCoin"
     base: ""
     site: "github.com"
-    repo: ""
-    file: ""
+    repo: "WojakCoinProj/wojakcore"
+    file: "multiple"
+    file_daemon: "https://github.com/WojakCoinProj/wojakcore/releases/download/1.0.1.2/wojakcoind"
+    file_cli: "https://github.com/WojakCoinProj/wojakcore/releases/download/1.0.1.2/wojakcoin-cli"
     algo: "sha256d"
-    family: ""
 
   - id: 10
     node: ""
@@ -215,9 +205,6 @@ nodes:
     repo: ""
     file: ""
     algo: ""
-    family: ""
-
-
 
   - id: 10
     node: ""
@@ -227,5 +214,4 @@ nodes:
     repo: ""
     file: ""
     algo: ""
-    family: ""
 
