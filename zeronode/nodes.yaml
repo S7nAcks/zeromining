@@ -1,1 +1,231 @@
-test
+#Zero Mining - Node & Pool Setup - YAML File: nodes.yaml
+
+nodes:
+
+  - id: 11
+    stat: "active"
+    node: "BTC"
+    name: "Bitcoin"
+    base: "bitcoin"
+    site: "bitcoincore.org"
+    repo: "bitcoin/bitcoin"
+    file: ""
+    algo: "sha256d"
+    family: "bitcoin"
+    website: "https://www.bitcoin.org/"
+    market: "https://coinmarketcap.com/currencies/bitcoin/"
+    explorerBlockLink: "https://www.blockchain.com/btc/block/$hash$"
+    explorerTxLink: "https://www.blockchain.com/btc/tx/{0}"
+    explorerAccountLink: "https://www.blockchain.com/btc/address/{0}"
+
+  - id: 12
+    stat: "active"
+    node: "BCH"
+    name: "BitcoinCash"
+    base: "bitcoin"
+    site: "github.com"
+    repo: "bitcoin-cash-node/bitcoin-cash-node"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+    family: "bitcoin"
+    website: ""
+    market: ""
+    explorerBlockLink: "https://bchblockexplorer.com/block/$height$"
+    explorerTxLink: "https://bchblockexplorer.com/tx/{0}"
+    explorerAccountLink: "https://bchblockexplorer.com/address/{0}"
+
+  - id: 13
+    stat: "active"
+    node: "BC2"
+    name: "BitcoinII"
+    base: "bitcoinII"
+    site: "github.com"
+    repo: "Bitcoin-II/BitcoinII-Core"
+    file: "x86_64-linux-CLI.tar.gz"
+    algo: "sha256d"
+    family: "bitcoin"
+    website: "https://bitcoin-ii.org/"
+    market: "https://coinmarketcap.com/currencies/bitcoinii/"
+    explorerBlockLink: "https://bitcoinii.ddns.net/explorer/block/$hash$"
+    explorerTxLink: "https://bitcoinii.ddns.net/explorer/tx/{0}"
+    explorerAccountLink: "https://bitcoinii.ddns.net/explorer/address/{0}"
+
+
+  - id: 14
+    stat: "active"
+    node: "BCH2"
+    name: "BitcoinCashII"
+    base: "bitcoincashII"
+    site: "github.com"
+    file: "linux64.tar.gz"
+    repo: "BitcoincashII/bitcoincashII-core"
+    algo: "sha256d"
+    family: "bitcoin"
+    website: ""
+    market: ""
+    explorerBlockLink: ""
+    explorerTxLink: ""
+    explorerAccountLink: ""
+
+
+  - id: 15
+    stat: "active"
+    node: "DGB"
+    name: "Digibyte"
+    base: "digibyte"
+    site: "github.com"
+    repo: "Digibyte-Core/digibyte"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+    family: "bitcoin"
+    website: "https://digibyte.org/"
+    market: "https://coinmarketcap.com/currencies/digibyte/"
+    explorerBlockLink: "https://chainz.cryptoid.info/dgb/block.dws?$height$.htm"
+    explorerTxLink: "https://chainz.cryptoid.info/dgb/tx.dws?{0}.htm"
+    explorerAccountLink: "https://chainz.cryptoid.info/dgb/address.dws?{0}.htm"
+
+  - id: 16
+    stat: "active"
+    node: "NITO"
+    name: "Nito"
+    base: "nito"
+    site: "github.com"
+    repo: "NitoNetwork/Nito-core"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+    family: "bitcoin"
+    website: "https://nito.network/"
+    market: ""
+    blockexplorer: "https://explorer.nito.network"
+    mempool: "https://mempool-explorer.nito.network"
+    mempoolBlock: "https://mempool-explorer.nito.network/block/$HASH$"
+    mempoolPool: "https://mempool-explorer.nito.network/mining/pool/$ADD$"
+    mempoolAddress: "https://mempool-explorer.nito.network/address/$ADDRESS$"
+    mempoolTx: "https://mempool-explorer.nito.network/tx/$TX$"
+
+  - id: 17
+    stat: "active"
+    node: "DVT"
+    name: "DeVault"
+    base: "devault"
+    site: "github.com"
+    repo: "devaultcrypto/devault"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+    family: "bitcoin"
+
+  - id: 18
+    stat: "active"
+    node: "TIT"
+    name: "Titcoin"
+    base: "titcoin"
+    site: "github.com"
+    repo: "titcoin/titcoin"
+    file: "tar.gz"
+    algo: "sha256d"
+    family: "bitcoin"
+
+  - id: 19
+    stat: "active"
+    node: "XRG"
+    name: "Ergon"
+    base: "bitcoin"
+    site: "github.com"
+    repo: "Ergon-moe/Bitcoin-Static"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+    family: "bitcoin"
+
+
+- id: 10
+    node: "ESF"
+    name: "ElevenSeventyFive"
+    base: "elevenseventyfive"
+    site: "github.com"
+    repo: "1175Dev/1175"
+    file: "linux-x86_64.tar.gz"
+    algo: "sha256d"
+    family: "bitcoin"
+
+  - id: 10
+    node: "PPC"
+    name: "Peercoin"
+    base: "peercoin"
+    site: "github.com"
+    repo: "peercoin/peercoin"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+    family: ""
+
+  - id: 10
+    node: "HRC"
+    name: "Hypercoin"
+    base: ""
+    site: "github.com"
+    repo: "Hypercoin-PRJ/hypercoin"
+    file: ""
+    algo: "sha256d"
+    family: ""
+
+  - id: 10
+    node: "OXC"
+    name: "OrdeXcoin"
+    base: ""
+    site: "github.com"
+    repo: ""
+    file: ""
+    algo: "sha256d"
+    family: ""
+
+  - id: 10
+    node: "DMD"
+    name: "DebitMyData"
+    base: ""
+    site: "github.com"
+    repo: ""
+    file: ""
+    algo: "sha256d"
+    family: ""
+
+  - id: 10
+    node: "XRO"
+    name: "XeroCoin"
+    base: ""
+    site: "github.com"
+    repo: ""
+    file: ""
+    algo: "sha256d"
+    family: ""
+
+  - id: 10
+    node: "WJK"
+    name: "WojakCoin"
+    base: ""
+    site: "github.com"
+    repo: ""
+    file: ""
+    algo: "sha256d"
+    family: ""
+
+  - id: 10
+    node: ""
+    name: ""
+    base: ""
+    site: "github.com"
+    repo: ""
+    file: ""
+    algo: ""
+    family: ""
+
+
+
+  - id: 10
+    node: ""
+    name: ""
+    base: ""
+    site: "github.com"
+    repo: ""
+    file: ""
+    algo: ""
+    family: ""
+
