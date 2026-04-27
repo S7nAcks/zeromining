@@ -1,11 +1,26 @@
-nodes:
-  id: 11
-  coin: BTC
-  name: Bitcoin
-  base: bitcoin
+#Zero Mining - Node & Pool Setup - YAML File: zero.yaml
 
-  id: 12
-  coin: BCH
-  name: Bitcoin Cash
-  base: bitcoin
-  
+configs:
+
+  PATH_BASE:     "/zero"                    # Base path
+  PATH_BUILD:    "${PATH_BASE}/build"       # Build path
+  PATH_NODES:    "${PATH_BASE}/.nodes"      # Nodes path
+  PATH_POOLS:    "${PATH_BASE}/.pools"      # Pools path
+  PATH_CONFS:    "${PATH_NODES}/.configs"   # Configs path
+  FILE_CONFS:    "nodes.yaml"               # Configs Yaml File
+  RPC_USER:      "zuser"                    # Node rpc username
+  RPC_PASS:      "zpass"                    # Node rpc password
+  NODE_PRUNE:    550                        # Node prune database size
+  POOL_DIFF_LOW: 100                        # Pool Starting Low Diff
+  POLL_DIFF_HGH: 100000                     # Pool Starting High Diff
+  REBUILD_ALL:   "true"                     # Node rebuild all
+
+ports:
+
+  web: 3000   # Pool Website
+  low: 3300   # Pool Stratum Low Diff
+  hgh: 4400   # Pool Stratum High Diff
+  rpc: 5500   # Node RPC port
+  zmq: 5700   # Node ZMQ port
+  p2p: 8000   # Node P2P port
+
