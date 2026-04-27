@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zero Mining — Pool Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;800;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════ DESIGN TOKENS ════════════════════════════ */
+:root {
+  --bg:        #070b10;
+  --bg2:       #0d1520;
+  --bg3:       #111e2e;
+  --panel:     #0a1525;
+  --border:    #1a3050;
+  --border2:   #0e2040;
+  --accent:    #00d4ff;
+  --accent2:   #0080cc;
+  --accent3:   #00ff99;
+  --gold:      #f0b429;
+  --red:       #ff4466;
+  --muted:     #4a6070;
+  --text:      #c8dcea;
+  --text2:     #7fa0b8;
+  --text3:     #3a5570;
+  --glow:      0 0 20px rgba(0,212,255,0.3);
+  --glow2:     0 0 40px rgba(0,212,255,0.15);
+  --font-head: 'Orbitron', monospace;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-body: 'Exo 2', sans-serif;
+  --radius:    6px;
+}
+
+/* ═══════════════════════════ RESET / BASE ═════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 14px; scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scanline overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.05) 2px,
+    rgba(0,0,0,0.05) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ═══════════════════════════ HEADER ═══════════════════════════════════ */
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 64px;
+  background: linear-gradient(90deg, #060c14 0%, #0a1830 50%, #060c14 100%);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--accent);
+  box-shadow: var(--glow);
+  animation: pulse-border 3s infinite;
+}
+
+@keyframes pulse-border {
+  0%,100% { box-shadow: 0 0 10px rgba(0,212,255,0.4); }
+  50%      { box-shadow: 0 0 25px rgba(0,212,255,0.8), 0 0 50px rgba(0,212,255,0.3); }
+}
+
+.site-title {
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(0,212,255,0.5);
+}
+
+.node-title {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text2);
+  letter-spacing: 2px;
+}
+
+.coin-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain;
+  border: 1px solid var(--border);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: rgba(0,255,100,0.08);
+  border: 1px solid rgba(0,255,100,0.3);
+  border-radius: 20px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent3);
+  box-shadow: 0 0 8px var(--accent3);
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.2; } }
+
+.live-text {
+  font-family: var(--font-head);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent3);
+  letter-spacing: 2px;
+}
+
+#clock {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text2);
+  letter-spacing: 1px;
+}
+
+/* ─── Node selector ─────────────────────────────────────────────── */
+#node-select-wrap {
+  position: relative;
+}
+
+#node-select {
+  appearance: none;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: var(--font-head);
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 6px 32px 6px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  outline: none;
+}
+#node-select:focus { border-color: var(--accent); }
+
+/* ═══════════════════════════ TABS ═════════════════════════════════════ */
+#tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 24px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  padding: 14px 20px 12px;
+  text-transform: uppercase;
+  transition: color .2s, border-color .2s;
+}
+
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  text-shadow: 0 0 12px rgba(0,212,255,0.5);
+}
+
+/* ═══════════════════════════ MAIN ═════════════════════════════════════ */
+#main { padding: 24px; max-width: 1600px; margin: 0 auto; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ═══════════════════════════ SECTIONS ════════════════════════════════ */
+.section {
+  margin-bottom: 28px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: linear-gradient(90deg, rgba(0,212,255,0.05) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border2);
+}
+
+.section-header h2 {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.section-badge {
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 10px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 8px;
+}
+
+.section-body { padding: 20px; }
+
+/* ═══════════════════════════ STAT GRID ════════════════════════════════ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  opacity: 0.6;
+}
+
+.stat-card:hover { border-color: var(--accent2); }
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--accent);
+  font-weight: 400;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(0,212,255,0.3);
+}
+
+.stat-value.gold   { color: var(--gold); text-shadow: 0 0 10px rgba(240,180,40,0.3); }
+.stat-value.green  { color: var(--accent3); text-shadow: 0 0 10px rgba(0,255,100,0.3); }
+.stat-value.small  { font-size: 14px; }
+
+.hashrate-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.hr-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.hr-label { font-family: var(--font-mono); font-size: 9px; color: var(--muted); letter-spacing:1px; margin-bottom: 4px; }
+.hr-value { font-family: var(--font-mono); font-size: 15px; color: var(--text); }
+
+/* ═══════════════════════════ MINERS ══════════════════════════════════ */
+.miner-row {
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+
+.miner-row:hover { border-color: var(--accent2); }
+
+.miner-header {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px 40px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.miner-header:hover { background: var(--bg3); }
+
+.miner-addr {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.miner-addr a {
+  color: inherit;
+  text-decoration: none;
+}
+.miner-addr a:hover { text-decoration: underline; text-decoration-color: var(--accent2); }
+
+.miner-stat {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text2);
+  text-align: right;
+}
+
+.expand-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 12px;
+  transition: transform .2s, color .2s;
+  justify-self: end;
+}
+
+.miner-row.open .expand-icon { transform: rotate(180deg); color: var(--accent); }
+
+.workers-wrap {
+  display: none;
+  background: var(--bg);
+  border-top: 1px solid var(--border2);
+}
+
+.miner-row.open .workers-wrap { display: block; }
+
+.workers-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.workers-table th {
+  padding: 8px 12px;
+  text-align: right;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border2);
+  white-space: nowrap;
+}
+.workers-table th:first-child { text-align: left; }
+
+.workers-table td {
+  padding: 8px 12px;
+  text-align: right;
+  color: var(--text2);
+  border-bottom: 1px solid rgba(26,48,80,0.4);
+}
+.workers-table td:first-child { text-align: left; color: var(--text); }
+.workers-table tr:last-child td { border-bottom: none; font-weight: 600; color: var(--text); }
+.workers-table tr.totals-row td { background: rgba(0,212,255,0.03); color: var(--accent2); }
+
+/* ═══════════════════════════ BLOCKS TABLE ════════════════════════════ */
+.blocks-table-wrap { overflow-x: auto; }
+
+.blocks-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  min-width: 900px;
+}
+
+.blocks-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--bg);
+}
+
+.blocks-table td {
+  padding: 10px 12px;
+  color: var(--text2);
+  border-bottom: 1px solid var(--border2);
+  white-space: nowrap;
+}
+
+.blocks-table tr:hover td { background: rgba(0,212,255,0.03); }
+
+.blocks-table td:first-child a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+.blocks-table td:first-child a:hover { text-decoration: underline; }
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.status-badge.confirmed  { background: rgba(0,255,100,0.1);  color: var(--accent3);  border: 1px solid rgba(0,255,100,0.3);  }
+.status-badge.pending    { background: rgba(240,180,40,0.1); color: var(--gold);     border: 1px solid rgba(240,180,40,0.3); }
+.status-badge.orphaned   { background: rgba(255,68,102,0.1); color: var(--red);      border: 1px solid rgba(255,68,102,0.3); }
+
+.confirm-bar {
+  width: 60px;
+  height: 4px;
+  background: var(--border2);
+  border-radius: 2px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.confirm-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent3));
+  border-radius: 2px;
+  transition: width 1s;
+}
+
+/* ═══════════════════════════ CONNECT TAB ════════════════════════════ */
+.connect-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.connect-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.connect-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: rgba(0,212,255,0.04);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 2px;
+}
+
+.connect-card-body { padding: 18px; }
+
+.connect-field { margin-bottom: 14px; }
+
+.connect-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.connect-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 8px 12px;
+  word-break: break-all;
+}
+
+.diff-section { margin-top: 8px; }
+
+.diff-badge {
+  display: inline-block;
+  font-family: var(--font-head);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  margin-bottom: 6px;
+}
+.diff-badge.low { background: rgba(0,212,255,0.1); color: var(--accent);  border: 1px solid rgba(0,212,255,0.3); }
+.diff-badge.hgh { background: rgba(240,180,40,0.1); color: var(--gold); border: 1px solid rgba(240,180,40,0.3); }
+
+/* ═══════════════════════════ MISC UI ═════════════════════════════════ */
+.loading-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  gap: 12px;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+/* ─── Block-found chime toast ───────────────────────────────────── */
+#toast-wrap {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  background: linear-gradient(135deg, #0a2a1a 0%, #0d1525 100%);
+  border: 1px solid var(--accent3);
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 280px;
+  box-shadow: 0 0 30px rgba(0,255,100,0.2);
+  animation: toast-in .3s ease;
+}
+
+@keyframes toast-in {
+  from { opacity:0; transform: translateY(20px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+.toast-icon { font-size: 24px; }
+.toast-text { flex: 1; }
+.toast-title { font-family: var(--font-head); font-size: 11px; font-weight: 600; color: var(--accent3); letter-spacing: 1px; }
+.toast-body  { font-family: var(--font-mono); font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+/* ─── Responsive ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .hashrate-row { grid-template-columns: repeat(3, 1fr); }
+  .miner-header { grid-template-columns: 1fr 80px 30px; }
+  .miner-stat:nth-child(3) { display: none; }
+  #header { padding: 0 12px; }
+  .site-title { font-size: 14px; }
+  #main { padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ HEADER ═══════════════════════════════════ -->
+<header id="header">
+  <div class="header-left">
+    <div class="logo-mark">Z</div>
+    <div>
+      <div class="site-title">Zero Mining</div>
+      <div id="node-subtitle" class="node-title">Pool Dashboard</div>
+    </div>
+    <img id="coin-logo" class="coin-logo" src="" alt="" style="display:none">
+  </div>
+  <div class="header-right">
+    <div id="node-select-wrap">
+      <select id="node-select"></select>
+    </div>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span class="live-text">LIVE</span>
+    </div>
+    <div id="clock">--:--:--</div>
+  </div>
+</header>
+
+<!-- ═══════════════════════ TABS ═════════════════════════════════════ -->
+<nav id="tabs">
+  <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+  <button class="tab-btn" data-tab="connect">Connect</button>
+</nav>
+
+<!-- ═══════════════════════ MAIN ═════════════════════════════════════ -->
+<main id="main">
+
+  <!-- ── DASHBOARD TAB ─────────────────────────────────────────── -->
+  <div id="tab-dashboard" class="tab-panel active">
+
+    <!-- Pool Overview -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Pool Overview</h2>
+        <span class="section-badge" id="uptime-badge">UP: --</span>
+      </div>
+      <div class="section-body">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Blocks Found</div>
+            <div class="stat-value gold" id="stat-blocks">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Block Height</div>
+            <div class="stat-value" id="stat-height">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Network Diff</div>
+            <div class="stat-value" id="stat-netdiff">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Pool Hashrate</div>
+            <div class="stat-value green" id="stat-poolhr">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Net Hashrate</div>
+            <div class="stat-value" id="stat-nethr">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Miners</div>
+            <div class="stat-value" id="stat-miners">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Workers</div>
+            <div class="stat-value" id="stat-workers">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Uptime</div>
+            <div class="stat-value small" id="stat-uptime">—</div>
+          </div>
+        </div>
+        <div class="hashrate-row">
+          <div class="hr-card"><div class="hr-label">Current</div><div class="hr-value" id="hr-current">—</div></div>
+          <div class="hr-card"><div class="hr-label">5 min</div><div class="hr-value"   id="hr-5m">—</div></div>
+          <div class="hr-card"><div class="hr-label">15 min</div><div class="hr-value"  id="hr-15m">—</div></div>
+          <div class="hr-card"><div class="hr-label">1 hour</div><div class="hr-value"  id="hr-1h">—</div></div>
+          <div class="hr-card"><div class="hr-label">1 day</div><div class="hr-value"   id="hr-1d">—</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Miners -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Miners</h2>
+        <span class="section-badge" id="miners-badge">Active 24h</span>
+      </div>
+      <div class="section-body" id="miners-container">
+        <div class="loading-overlay"><div class="spinner"></div>LOADING MINERS …</div>
+      </div>
+    </section>
+
+    <!-- Blocks Found -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Blocks Found</h2>
+        <span class="section-badge" id="blocks-badge">All Time</span>
+      </div>
+      <div class="section-body">
+        <div class="blocks-table-wrap">
+          <table class="blocks-table">
+            <thead>
+              <tr>
+                <th>Height</th>
+                <th>Time Found</th>
+                <th>User</th>
+                <th>Worker</th>
+                <th>Share Diff</th>
+                <th>Reward</th>
+                <th>Status</th>
+                <th>Effort</th>
+                <th>Confirm</th>
+              </tr>
+            </thead>
+            <tbody id="blocks-tbody">
+              <tr><td colspan="9" class="empty-state">No blocks yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /dashboard -->
+
+  <!-- ── CONNECT TAB ───────────────────────────────────────────── -->
+  <div id="tab-connect" class="tab-panel">
+    <section class="section">
+      <div class="section-header"><h2>Miner Configuration</h2></div>
+      <div class="section-body">
+        <div class="connect-grid" id="connect-container">
+          <div class="loading-overlay"><div class="spinner"></div>LOADING …</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<!-- Toast container -->
+<div id="toast-wrap"></div>
+
+<!-- Chime audio -->
+<audio id="chime" preload="auto">
+  <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQoGAACBhYqFbF1fernuzMrDxsrO0NTV2+Hn6e3w8/b4+fr7/Pv7+vn39fPx7+3r6ejn5uXl5OTk5eXm5+np6+3v8fP19/n7/P3+/v7+/f38+/r5+Pb08vDu7Onm5OHe29jV0s/MysmGhYWEhoeLjpGUl5mcn6Kkpqmpqqusrq+wsrO0tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHT1NXW19jZ2tvc3d7f4OHi4+Tl5ufo6err7O3u7/Dx8vP09fb3+Pn6+/z9/v8AAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8w" type="audio/wav">
+</audio>
+
+<script>
+/* ═══════════════════════════ CONFIG & STATE ══════════════════════════ */
+const API = '';          // empty = same origin
+let POOLS    = [];
+let activeNode = null;
+let knownBlockHeights = new Set();
+let refreshTimer = null;
+const REFRESH_MS = 45_000;   // 45 seconds
+
+/* ═══════════════════════════ UTILITIES ═══════════════════════════════ */
+function fmtHash(h) {
+  if (h === null || h === undefined || isNaN(h)) return '—';
+  const n = parseFloat(h);
+  if (n >= 1e18) return (n/1e18).toFixed(2) + ' E';
+  if (n >= 1e15) return (n/1e15).toFixed(2) + ' P';
+  if (n >= 1e12) return (n/1e12).toFixed(2) + ' T';
+  if (n >= 1e9)  return (n/1e9 ).toFixed(2) + ' G';
+  if (n >= 1e6)  return (n/1e6 ).toFixed(2) + ' M';
+  if (n >= 1e3)  return (n/1e3 ).toFixed(2) + ' K';
+  return n.toFixed(2) + ' H';
+}
+
+function fmtDiff(d) { return fmtHash(d); }
+
+function fmtUptime(secs) {
+  if (!secs) return '—';
+  const Y = Math.floor(secs/31536000); secs %= 31536000;
+  const Mo= Math.floor(secs/2592000);  secs %= 2592000;
+  const D = Math.floor(secs/86400);    secs %= 86400;
+  const H = Math.floor(secs/3600);     secs %= 3600;
+  const M = Math.floor(secs/60);
+  let parts = [];
+  if (Y)  parts.push(`${Y}Y`);
+  if (Mo) parts.push(`${Mo}M`);
+  if (D)  parts.push(`${D}D`);
+  if (H)  parts.push(`${H}H`);
+  if (M)  parts.push(`${M}M`);
+  return parts.slice(0,4).join(' ') || '<1M';
+}
+
+function fmtTime(ts) {
+  if (!ts) return '—';
+  const d = new Date(ts);
+  const pad = n => String(n).padStart(2,'0');
+  const yr  = d.getFullYear();
+  const mo  = pad(d.getMonth()+1);
+  const dy  = pad(d.getDate());
+  const hr  = d.getHours();
+  const mn  = pad(d.getMinutes());
+  const sc  = pad(d.getSeconds());
+  const ampm= hr>=12?'PM':'AM';
+  const h12 = pad(hr%12||12);
+  return `${yr}/${mo}/${dy} ${h12}:${mn}:${sc} ${ampm}`;
+}
+
+function truncAddr(addr) {
+  if (!addr || addr.length <= 12) return addr || '—';
+  return addr.slice(0,4) + '…' + addr.slice(-4);
+}
+
+function statusBadge(s) {
+  const cls = (s||'').toLowerCase().includes('confirm') ? 'confirmed'
+            : (s||'').toLowerCase().includes('orphan')  ? 'orphaned'
+            : 'pending';
+  return `<span class="status-badge ${cls}">${s||'Pending'}</span>`;
+}
+
+function confirmBar(pct) {
+  const p = Math.min(100, Math.round(parseFloat(pct)||0));
+  return `<div class="confirm-bar"><div class="confirm-fill" style="width:${p}%"></div></div>${p}%`;
+}
+
+function blockExplorerUrl(node, height) {
+  const explorers = {
+    BTC:  `https://mempool.space/block-height/${height}`,
+    BCH:  `https://blockchair.com/bitcoin-cash/block/${height}`,
+    DGB:  `https://digibyteblockexplorer.com/block/${height}`,
+    NITO: `https://explorer.nito.network/block/${height}`,
+  };
+  return explorers[node] || `#block-${height}`;
+}
+
+function coinLogoUrl(node) {
+  const map = {
+    BTC:  'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
+    BCH:  'https://cryptologos.cc/logos/bitcoin-cash-bch-logo.png',
+    DGB:  'https://cryptologos.cc/logos/digibyte-dgb-logo.png',
+    NITO: 'https://raw.githubusercontent.com/NitoNetwork/Nito-core/master/share/pixmaps/nito.png',
+  };
+  return map[node] || '';
+}
+
+/* ═══════════════════════════ CLOCK ══════════════════════════════════ */
+function tickClock() {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US', {hour12:false});
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+/* ═══════════════════════════ TOAST / CHIME ══════════════════════════ */
+function playChime() {
+  const audio = document.getElementById('chime');
+  if (audio) { audio.currentTime = 0; audio.play().catch(()=>{}); }
+}
+
+function showToast(title, body) {
+  const wrap = document.getElementById('toast-wrap');
+  const el   = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<div class="toast-icon">⛏️</div><div class="toast-text"><div class="toast-title">${title}</div><div class="toast-body">${body}</div></div>`;
+  wrap.prepend(el);
+  setTimeout(() => el.remove(), 8000);
+}
+
+/* ═══════════════════════════ FETCH HELPERS ══════════════════════════ */
+async function apiFetch(path) {
+  const res = await fetch(API + path);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+/* ═══════════════════════════ INIT ══════════════════════════════════ */
+async function init() {
+  try {
+    POOLS = await apiFetch('/api/config');
+  } catch (e) {
+    console.error('Failed to load config:', e);
+    POOLS = [];
+  }
+
+  const sel = document.getElementById('node-select');
+  sel.innerHTML = POOLS.map(p =>
+    `<option value="${p.node}">${p.node} — ${p.name}</option>`
+  ).join('');
+  sel.addEventListener('change', () => selectNode(sel.value));
+
+  if (POOLS.length) {
+    selectNode(POOLS[0].node);
+  }
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // WebSocket
+  connectWs();
+}
+
+function selectNode(node) {
+  activeNode = node;
+  const cfg = POOLS.find(p => p.node === node);
+  if (!cfg) return;
+
+  document.getElementById('node-subtitle').textContent = `${node} — ${cfg.name} Pool Dashboard`;
+
+  const logo = document.getElementById('coin-logo');
+  const logoUrl = coinLogoUrl(node);
+  if (logoUrl) {
+    logo.src = logoUrl;
+    logo.alt = node;
+    logo.style.display = '';
+  } else {
+    logo.style.display = 'none';
+  }
+
+  // Reset
+  clearTimeout(refreshTimer);
+  refreshAll();
+}
+
+function refreshAll() {
+  if (!activeNode) return;
+  loadStats();
+  loadMiners();
+  loadBlocks();
+  buildConnectTab();
+  refreshTimer = setTimeout(refreshAll, REFRESH_MS);
+}
+
+/* ═══════════════════════════ STATS ══════════════════════════════════ */
+async function loadStats() {
+  try {
+    const d = await apiFetch(`/api/${activeNode}/stats`);
+    document.getElementById('stat-blocks').textContent  = d.blocksFound ?? '—';
+    document.getElementById('stat-height').textContent  = d.height ? d.height.toLocaleString() : '—';
+    document.getElementById('stat-netdiff').textContent = fmtDiff(d.networkDiff);
+    document.getElementById('stat-poolhr').textContent  = fmtHash(d.poolHashrate);
+    document.getElementById('stat-nethr').textContent   = fmtHash(d.networkHashrate);
+    document.getElementById('stat-miners').textContent  = d.miners  ?? '—';
+    document.getElementById('stat-workers').textContent = d.workers ?? '—';
+    document.getElementById('stat-uptime').textContent  = fmtUptime(d.uptime);
+    document.getElementById('uptime-badge').textContent = `UP: ${fmtUptime(d.uptime)}`;
+
+    document.getElementById('hr-current').textContent = fmtHash(d.hashrateCurrent ?? d.poolHashrate);
+    document.getElementById('hr-5m').textContent      = fmtHash(d.hashrate5m  ?? d.poolHashrate);
+    document.getElementById('hr-15m').textContent     = fmtHash(d.hashrate15m ?? d.poolHashrate);
+    document.getElementById('hr-1h').textContent      = fmtHash(d.hashrate1h  ?? d.poolHashrate);
+    document.getElementById('hr-1d').textContent      = fmtHash(d.hashrate1d  ?? d.poolHashrate);
+  } catch (_) {}
+}
+
+/* ═══════════════════════════ MINERS ═════════════════════════════════ */
+async function loadMiners() {
+  const container = document.getElementById('miners-container');
+  try {
+    const d       = await apiFetch(`/api/${activeNode}/miners`);
+    const miners  = d.miners || [];
+    document.getElementById('miners-badge').textContent = `${miners.length} Active (24h)`;
+
+    if (!miners.length) {
+      container.innerHTML = '<div class="empty-state">No active miners in the past 24 hours</div>';
+      return;
+    }
+
+    container.innerHTML = miners.map(m => renderMiner(m)).join('');
+    container.querySelectorAll('.miner-header').forEach(h => {
+      h.addEventListener('click', () => h.closest('.miner-row').classList.toggle('open'));
+    });
+  } catch (e) {
+    container.innerHTML = `<div class="empty-state">Failed to load miners: ${e.message}</div>`;
+  }
+}
+
+function renderMiner(m) {
+  const workers = Object.values(m.workers || {});
+  const totalHr = workers.reduce((a,w)=>a+(w.hashrate||0),0);
+  const addrUrl = blockExplorerUrl(activeNode,'') + '?address=' + m.address;
+
+  const workerRows = workers.map(w => `
+    <tr>
+      <td>${w.worker}</td>
+      <td>${fmtHash(w.hashrate)}</td>
+      <td>${(w.blocks||0).toLocaleString()}</td>
+      <td>${(w.shares||0).toLocaleString()}</td>
+      <td>${fmtDiff(w.bestshare)}</td>
+      <td>${fmtDiff(w.bestever)}</td>
+      <td>${fmtTime(w.lastshare)}</td>
+    </tr>`).join('');
+
+  const bestShare  = Math.max(...workers.map(w=>w.bestshare||0),0);
+  const bestEver   = Math.max(...workers.map(w=>w.bestever||0),0);
+  const lastShare  = workers.reduce((a,w)=>(!a||w.lastshare>a?w.lastshare:a),null);
+  const totBlocks  = workers.reduce((a,w)=>a+(w.blocks||0),0);
+  const totShares  = workers.reduce((a,w)=>a+(w.shares||0),0);
+
+  return `
+  <div class="miner-row">
+    <div class="miner-header">
+      <div class="miner-addr" title="${m.address}">
+        <a href="${addrUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${m.address}</a>
+      </div>
+      <div class="miner-stat">${(m.blocks||0)} blk</div>
+      <div class="miner-stat">${m.rewards ? m.rewards.toFixed(8) : '—'}</div>
+      <div class="expand-icon">▾</div>
+    </div>
+    <div class="workers-wrap">
+      <table class="workers-table">
+        <thead><tr>
+          <th>Worker</th><th>Hashrate</th><th>Blocks</th>
+          <th>Shares</th><th>Best Share</th><th>Best Ever</th><th>Last Share</th>
+        </tr></thead>
+        <tbody>
+          ${workerRows || '<tr><td colspan="7" class="empty-state">No worker data</td></tr>'}
+        </tbody>
+        <tfoot><tr class="totals-row">
+          <td>TOTALS</td>
+          <td>${fmtHash(totalHr)}</td>
+          <td>${totBlocks.toLocaleString()}</td>
+          <td>${totShares.toLocaleString()}</td>
+          <td>${fmtDiff(bestShare)}</td>
+          <td>${fmtDiff(bestEver)}</td>
+          <td>${fmtTime(lastShare)}</td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>`;
+}
+
+/* ═══════════════════════════ BLOCKS ═════════════════════════════════ */
+async function loadBlocks() {
+  const tbody = document.getElementById('blocks-tbody');
+  try {
+    const d      = await apiFetch(`/api/${activeNode}/blocks`);
+    const blocks = d.blocks || [];
+    document.getElementById('blocks-badge').textContent = `${blocks.length} Total`;
+
+    if (!blocks.length) {
+      tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No blocks found yet</td></tr>';
+      return;
+    }
+
+    // Detect new blocks
+    blocks.forEach(b => {
+      const key = b.height + '-' + activeNode;
+      if (!knownBlockHeights.has(key) && knownBlockHeights.size > 0) {
+        playChime();
+        showToast('⛏️ Block Found!', `Height ${b.height} by ${truncAddr(b.user)}`);
+      }
+      knownBlockHeights.add(key);
+    });
+
+    tbody.innerHTML = blocks.slice().reverse().map(b => {
+      const explorerUrl = blockExplorerUrl(activeNode, b.height);
+      const isConfirmed = (b.status||'').toLowerCase().includes('confirm');
+      return `
+      <tr>
+        <td><a href="${explorerUrl}" target="_blank" rel="noopener">${b.height||'—'}</a></td>
+        <td>${fmtTime(b.time)}</td>
+        <td title="${b.user||''}">${truncAddr(b.user)}</td>
+        <td>${b.worker||'—'}</td>
+        <td>${fmtDiff(b.shareDiff || b.diff)}</td>
+        <td>${isConfirmed && b.reward ? b.reward.toFixed(8) : '—'}</td>
+        <td>${statusBadge(b.status)}</td>
+        <td>${b.effort ? b.effort.toFixed(1)+'%' : '—'}</td>
+        <td>${confirmBar(b.confirmPct || (isConfirmed?100:0))}</td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="9" class="empty-state">Failed to load blocks: ${e.message}</td></tr>`;
+  }
+}
+
+/* ═══════════════════════════ CONNECT TAB ════════════════════════════ */
+function buildConnectTab() {
+  const container = document.getElementById('connect-container');
+  if (!POOLS.length) {
+    container.innerHTML = '<div class="empty-state">No pools configured</div>';
+    return;
+  }
+
+  container.innerHTML = POOLS.map(p => `
+  <div class="connect-card">
+    <div class="connect-card-head">
+      <span>${p.node}</span>
+      <span style="color:var(--text2);font-size:10px;font-weight:400">${p.name}</span>
+    </div>
+    <div class="connect-card-body">
+      <div class="connect-field">
+        <div class="connect-label">Username</div>
+        <div class="connect-value">YourWalletAddress.WorkerID</div>
+      </div>
+      <div class="connect-field">
+        <div class="connect-label">Password</div>
+        <div class="connect-value">x</div>
+      </div>
+      <div class="diff-section">
+        <div class="diff-badge low">LOW DIFF — ${fmtDiff(p.diff_low)}</div>
+        <div class="connect-value">stratum+tcp://${p.host}:${p.port_low}</div>
+      </div>
+      <div class="diff-section" style="margin-top:10px">
+        <div class="diff-badge hgh">HIGH DIFF — ${fmtDiff(p.diff_hgh)}</div>
+        <div class="connect-value">stratum+tcp://${p.host}:${p.port_hgh}</div>
+      </div>
+    </div>
+  </div>`).join('');
+}
+
+/* ═══════════════════════════ WEBSOCKET ══════════════════════════════ */
+function connectWs() {
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  const ws    = new WebSocket(`${proto}://${location.host}/ws`);
+
+  ws.addEventListener('message', e => {
+    try {
+      const msg = JSON.parse(e.data);
+      if (msg.type === 'blocks' && msg.node === activeNode) {
+        loadBlocks();
+      }
+    } catch (_) {}
+  });
+
+  ws.addEventListener('close', () => setTimeout(connectWs, 5000));
+}
+
+/* ═══════════════════════════ START ══════════════════════════════════ */
+init();
+</script>
+</body>
+</html>
