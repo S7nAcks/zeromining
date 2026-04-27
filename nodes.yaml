@@ -1,0 +1,155 @@
+#Zero Mining - Node & Pool Setup - YAML File: nodes.yaml
+
+nodes:
+
+  - id: 11
+    init: "NodePool"   # "Node/Pool/NodePool/Disable"
+    node: "BTC"
+    name: "Bitcoin"
+    site: "bitcoincore.org"
+    repo: "bitcoin/bitcoin"
+    file: "NULL"
+    base: "bitcoin"
+    daemon: ""
+    cliexe: ""
+    algo: "sha256d"
+
+  - id: 12
+    node: "BCH"
+    name: "BitcoinCash"
+    base: "bitcoin"
+    site: "github.com"
+    repo: "bitcoin-cash-node/bitcoin-cash-node"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+
+  - id: 13
+    node: "BC2"
+    name: "BitcoinII"
+    base: "bitcoinII"
+    site: "github.com"
+    repo: "Bitcoin-II/BitcoinII-Core"
+    file: "x86_64-linux-CLI.tar.gz"
+    algo: "sha256d"
+
+  - id: 14
+    node: "BCH2"
+    name: "BitcoinCashII"
+    base: "bitcoincashII"
+    site: "github.com"
+    file: "linux64.tar.gz"
+    repo: "BitcoincashII/bitcoincashII-core"
+    algo: "sha256d"
+
+  - id: 15
+    node: "DGB"
+    name: "Digibyte"
+    base: "digibyte"
+    site: "github.com"
+    repo: "Digibyte-Core/digibyte"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+
+  - id: 16
+    node: "NITO"
+    name: "Nito"
+    base: "nito"
+    site: "github.com"
+    repo: "NitoNetwork/Nito-core"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+
+  - id: 17
+    node: "DVT"
+    name: "DeVault"
+    base: "devault"
+    site: "github.com"
+    repo: "devaultcrypto/devault"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+
+  - id: 18
+    node: "TIT"
+    name: "Titcoin"
+    base: "titcoin"
+    site: "github.com"
+    repo: "titcoin/titcoin"
+    file: "tar.gz"
+    algo: "sha256d"
+
+  - id: 19
+    node: "XRG"
+    name: "Ergon"
+    base: "bitcoin"
+    site: "github.com"
+    repo: "Ergon-moe/Bitcoin-Static"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+
+  - id: 20
+    node: "ESF"
+    name: "ElevenSeventyFive"
+    base: "elevenseventyfive"
+    site: "github.com"
+    repo: "1175Dev/1175"
+    file: "linux-x86_64.tar.gz"
+    algo: "sha256d"
+
+  - id: 21
+    node: "PPC"
+    name: "Peercoin"
+    base: "peercoin"
+    site: "github.com"
+    repo: "peercoin/peercoin"
+    file: "x86_64-linux-gnu.tar.gz"
+    algo: "sha256d"
+
+  - id: 22
+    node: "HRC"
+    name: "Hypercoin"
+    base: "hipercoin"
+    site: "github.com"
+    repo: "Hypercoin-PRJ/hypercoin"
+    file: "https://github.com/Hypercoin-PRJ/wallet/raw/refs/heads/master/Hypercoin-wallet-Linux-v30.2.zip"
+    algo: "sha256d"
+
+  - id: 23
+    node: "OXC"
+    name: "OrdeXcoin"
+    base: "ordexcoin"
+    site: "github.com"
+    repo: "OrdexCoin/Ordexcoin-Core"
+    file: "linux.tar.gz"
+    algo: "sha256d"
+
+  - id: 24
+    node: "DMD"
+    name: "DebitMyData"
+    base: "debitmydata"
+    site: "github.com"
+    repo: "DebitMyData-PoW/DebitMyData-PoW-Core"
+    file: "linux.tar.gz"
+    algo: "sha256d"
+
+  - id: 25
+    node: "XRO"
+    name: "XeroCoin"
+    base: "xerocoin"
+    site: "github.com"
+    repo: "XeroCoinX/Xero"
+    file: "multiple"
+    file_daemon: "https://github.com/XeroCoinX/Xero/releases/download/Version.25.2.0/xerocoin-core-v25.2.0-linux-x86_64-daemon"
+    file_cli: "https://github.com/XeroCoinX/Xero/releases/download/Version.25.2.0/xerocoin-core-v25.2.0-linux-x86_64-cli"
+    algo: "sha256d"
+
+  - id: 26
+    node: "WJK"
+    name: "WojakCoin"
+    base: ""
+    site: "github.com"
+    repo: "WojakCoinProj/wojakcore"
+    file: "multiple"
+    file_daemon: "https://github.com/WojakCoinProj/wojakcore/releases/download/1.0.1.2/wojakcoind"
+    file_cli: "https://github.com/WojakCoinProj/wojakcore/releases/download/1.0.1.2/wojakcoin-cli"
+    algo: "sha256d"
+
